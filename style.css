@@ -1,0 +1,44 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container{
+  background-color: gray;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+.display{
+  height: 150px;
+  width: 400px;
+  background-color: white;
+}
+.buttons{
+  text-align: center;
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+.buttons button{
+  flex: 1;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.nums{
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+.nums button{
+  pad: 10px;
+  font-size: 20px;
+}
