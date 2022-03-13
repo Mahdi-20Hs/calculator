@@ -16,9 +16,14 @@ body{
   border-radius: 5px;
 }
 .display{
-  height: 150px;
+  height: 100px;
   width: 400px;
+  padding: 5px;
   background-color: white;
+  font-size: 25px;
+  display: flex;
+  align-items:flex-end;
+  justify-content: flex-end;
 }
 .buttons{
   text-align: center;
