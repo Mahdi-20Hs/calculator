@@ -4,7 +4,7 @@ const deleteButton = document.querySelector('.delete');
 const equalButton = document.querySelector('.equal');
 const pointButton = document.querySelector('.point');
 const numbers = document.querySelectorAll('.nums');
-const buttons = document.querySelectorAll('.buttons');
+const buttons = document.querySelectorAll('#buttons');
 
 let num1 = '';
 let num2 = '';
