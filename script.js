@@ -1,125 +1,115 @@
 const display = document.querySelector('.content');
 const clearButton = document.querySelector('.clear');
 const deleteButton = document.querySelector('.delete');
-const divideButton = document.querySelector('.divide');
-const multiplyButton = document.querySelector('.multiply');
-const subtractButton = document.querySelector('.subtract');
-const addButton = document.querySelector('.add');
 const equalButton = document.querySelector('.equal');
 const pointButton = document.querySelector('.point');
-const zero = document.querySelector('.zero');
-const one = document.querySelector('.one');
-const two = document.querySelector('.two');
-const three = document.querySelector('.three');
-const four = document.querySelector('.four');
-const five = document.querySelector('.five');
-const six = document.querySelector('.six');
-const seven = document.querySelector('.seven');
-const eight = document.querySelector('.eight');
-const nine = document.querySelector('.nine');
+const numbers = document.querySelectorAll('.nums');
+const buttons = document.querySelectorAll('.buttons');
 
+let num1 = '';
+let num2 = '';
+let operator = '';
 
-function deleteLastChar(){
-  let splitedDisplay = display.textContent.split("");
-  if(display.textContent.charAt(display.textContent.length - 1) === ' '){
-    splitedDisplay.splice(display.textContent.length - 3, 3);
-  }else{
-    splitedDisplay.splice(display.textContent.length - 1, 1);
-  }
-  let result = splitedDisplay.join('');
-  display.textContent = result;
-}
-function populateDisplay(button){
-  button.addEventListener('click', () => {
-    let displayText = display.textContent;
-    if(displayText === '0' && button !== pointButton){
-      display.textContent = '';
-    }
-
-    if(
-      (button === addButton || button === subtractButton || button === multiplyButton || button === divideButton) &&
-      (displayText.charAt(displayText.length - 2) === '+' ||
-      displayText.charAt(displayText.length - 2) === '-' ||
-      displayText.charAt(displayText.length - 2) === '×' ||
-      displayText.charAt(displayText.length - 2) === '÷')){
-        deleteLastChar();
+numbers.forEach((number) => {
+  number.addEventListener('click',function(){
+    if(operator === ''){
+      if(num1 === '0' && this !== pointButton){
+        num1 = ''
       }
-      
-    if(button === addButton || button === subtractButton || button === multiplyButton || button === divideButton){
-      if(display.textContent.split(" ")[2] !== undefined){
-        display.textContent = `${operation(display.textContent.split(" ")[1], Number(display.textContent.split(" ")[0]), Number(display.textContent.split(" ")[2]))}`
+      num1 += this.textContent;
+      if(num1.includes('.')){
+        pointButton.setAttribute('disabled', true)
       }
-      display.textContent += ` ${button.textContent} `;
+      display.textContent = `${num1}${operator}${num2}`
     }else{
-      display.textContent += button.textContent;
+      if(num2 === '0' && this !== pointButton){
+        num2 = ''
+      }
+      num2 += this.textContent;
+      if(num2.includes('.')){
+        pointButton.setAttribute('disabled', true)
+      }
+      display.textContent = `${num1}${operator}${num2}`
     }
-    if(display.textContent.split(" ")[1] === undefined && display.textContent.split(" ")[0].includes('.')){
-      pointButton.setAttribute('disabled', true)
-    }else if(display.textContent.split(" ")[1] !== undefined && display.textContent.split(" ")[2].includes('.')){
-      pointButton.setAttribute('disabled', true)
-    }else{
-      pointButton.toggleAttribute('disabled', false)
-    }
-    
   })
-}
-
-populateDisplay(zero);
-populateDisplay(one);
-populateDisplay(two);
-populateDisplay(three);
-populateDisplay(four);
-populateDisplay(five);
-populateDisplay(six);
-populateDisplay(seven);
-populateDisplay(eight);
-populateDisplay(nine);
-populateDisplay(pointButton);
-populateDisplay(addButton);
-populateDisplay(subtractButton);
-populateDisplay(multiplyButton);
-populateDisplay(divideButton)
-clearButton.addEventListener('click', () => {
-  display.textContent = '';
-});
-deleteButton.addEventListener('click', deleteLastChar)
-equalButton.addEventListener('click', () => {
-  if(display.textContent.split(" ").length === 3){
-    display.textContent = `${operation(display.textContent.split(" ")[1], Number(display.textContent.split(" ")[0]), Number(display.textContent.split(" ")[2]))}`
-  }
 })
 
-
-
-
-function add(num1, num2){
-  return (num1 + num2);
-}
-
-function subtract(num1, num2){
-  return num1 - num2
-}
-
-function multiply(num1, num2){
-  return num1 * num2
-}
-
-function divide(num1, num2){
-  if(num2 === 0){
-    return alert('don\'t divide by zero')
+buttons.forEach((button) => {
+  button.addEventListener('click', function(){
+    if(num2 === ''){
+      if(operator !== ''){
+        display.textContent = display.textContent.replace(`${operator}`, '');
+      }
+      operator = button.textContent;
+      display.textContent += operator;
+      
+    }else{
+      num1 = `${operation(operator, num1, num2)}`;
+      num2 = '';
+      operator = button.textContent;
+      display.textContent = `${num1}${operator}`
+    }
+    pointButton.toggleAttribute('disabled', false);
+  })
+})
+deleteButton.addEventListener('click', function(){
+  if(num1 === 'error'){
+    display.textContent = '';
+    num1 = '';
+    num2 = '';
   }
-  return num1 / num2
-}
+  if(num2 !== ''){
+    num2 = num2.replace(num2.charAt(num2.length-1),'');
+    if(!num2.includes('.')){
+      pointButton.toggleAttribute('disabled', false)
+    }
+    display.textContent = `${num1}${operator}${num2}`;
+    return;
+  }
+  if(operator !== '' && num2 === ''){
+    operator = '';
+    display.textContent = `${num1}${operator}${num2}`;
+    return;
+  }
+  if(operator === ''){
+    num1 = num1.replace(num1.charAt(num1.length-1),'');
+    if(!num1.includes('.')){
+      pointButton.toggleAttribute('disabled', false);
+    }
+    display.textContent = `${num1}${operator}${num2}`;
 
+  }
+})
+clearButton.addEventListener('click', function(){
+  num1 = '';
+  num2 = ''
+  operator = '';
+  pointButton.toggleAttribute('disabled', false)
+  display.textContent = '';
+})
+
+equalButton.addEventListener('click', function(){
+  num1 = `${operation(operator, num1, num2)}`;
+  num2 = '';
+  display.textContent = num1;
+  pointButton.toggleAttribute('disabled', false)
+})
 function operation(operator, num1, num2){
-  
+  num1 = Number(num1);
+  num2 = Number(num2);
   if(operator === '+'){
-     return add(num1, num2).toFixed(2)
-  }else if(operator === '-'){
-    return subtract(num1, num2).toFixed(2)
-  }else if(operator === '×'){
-    return multiply(num1, num2).toFixed(2)
-  }else if(operator === '÷'){
-    return divide(num1, num2).toFixed(2)
+    return num1 + num2;
+  }
+  if(operator === '-'){
+    return num1 - num2;
+  }
+  if(operator === '×'){
+    return num1 * num2
+  }
+  if(operator === '÷'){
+    if(num2 === 0){
+      return 'error'
+    }
+    return num1 / num2;
   }
 }

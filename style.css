@@ -25,25 +25,25 @@ body{
   align-items:flex-end;
   justify-content: flex-end;
 }
-.buttons{
+.deleting-buttons{
   text-align: center;
   display: flex;
   gap: 5px;
   margin-top: 5px;
 }
-.buttons button{
+.deleting-buttons button{
   flex: 1;
   padding: 10px;
   font-size: 20px;
 }
 
-.nums{
+.numbers{
   margin-top: 5px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 5px;
 }
-.nums button{
+.numbers button{
   pad: 10px;
   font-size: 20px;
 }
