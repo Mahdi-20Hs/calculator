@@ -10,6 +10,19 @@ let num1 = '';
 let num2 = '';
 let operator = '';
 
+function deleting(item){
+  return item.replace(item.charAt(item.length-1),'');
+}
+
+function clearing(){
+  num1 = '';
+  num2 = ''
+  operator = '';
+  display.textContent = '';
+  pointButton.toggleAttribute('disabled', false)
+}
+
+
 numbers.forEach((number) => {
   number.addEventListener('click',function(){
     if(operator === ''){
@@ -38,30 +51,28 @@ buttons.forEach((button) => {
   button.addEventListener('click', function(){
     if(num2 === ''){
       if(operator !== ''){
-        display.textContent = display.textContent.replace(`${operator}`, '');
+        operator = '';
       }
       operator = button.textContent;
-      display.textContent += operator;
-      
+      display.textContent = `${num1}${operator}${num2}`;
     }else{
-      num1 = `${operation(operator, num1, num2)}`;
+      num1 = `${operate(operator, num1, num2)}`;
       num2 = '';
       operator = button.textContent;
-      display.textContent = `${num1}${operator}`
+      display.textContent = `${num1}${operator}${num2}`
     }
     pointButton.toggleAttribute('disabled', false);
   })
 })
+
 deleteButton.addEventListener('click', function(){
-  if(num1 === 'error'){
-    display.textContent = '';
-    num1 = '';
-    num2 = '';
+  if(num1 === 'Error'){
+    clearing();
   }
   if(num2 !== ''){
-    num2 = num2.replace(num2.charAt(num2.length-1),'');
+    num2 = deleting(num2);
     if(!num2.includes('.')){
-      pointButton.toggleAttribute('disabled', false)
+      pointButton.toggleAttribute('disabled', false);
     }
     display.textContent = `${num1}${operator}${num2}`;
     return;
@@ -80,36 +91,35 @@ deleteButton.addEventListener('click', function(){
 
   }
 })
-clearButton.addEventListener('click', function(){
-  num1 = '';
-  num2 = ''
-  operator = '';
-  pointButton.toggleAttribute('disabled', false)
-  display.textContent = '';
-})
+
+clearButton.addEventListener('click',clearing)
 
 equalButton.addEventListener('click', function(){
-  num1 = `${operation(operator, num1, num2)}`;
+  num1 = `${operate(operator, num1, num2)}`;
   num2 = '';
   display.textContent = num1;
   pointButton.toggleAttribute('disabled', false)
 })
-function operation(operator, num1, num2){
+function operate(operator, num1, num2){
   num1 = Number(num1);
   num2 = Number(num2);
   if(operator === '+'){
-    return num1 + num2;
+    let result = num1 + num2;
+    return (Number.isInteger(result))? result: result.toFixed(2);
   }
   if(operator === '-'){
-    return num1 - num2;
+    let result = num1 - num2;
+    return (Number.isInteger(result))? result: result.toFixed(2);
   }
   if(operator === '×'){
-    return num1 * num2
+    let result = num1 * num2;
+    return (Number.isInteger(result))? result: result.toFixed(2);
   }
   if(operator === '÷'){
     if(num2 === 0){
-      return 'error'
+      return 'Error'
     }
-    return num1 / num2;
+    let result = num1 / num2;
+    return (Number.isInteger(result))? result: result.toFixed(2);
   }
 }
